@@ -849,6 +849,35 @@ section {
   }
 }
 
+/* ===== CONFETTI ===== */
+.confetti-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -10px;
+  opacity: 0;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotateZ(0deg) rotateX(0deg); opacity: 1; }
+  25% { opacity: 1; }
+  100% { transform: translateY(110vh) rotateZ(720deg) rotateX(360deg); opacity: 0; }
+}
+
+@keyframes confettiStar {
+  0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  50% { opacity: 1; transform: translateY(55vh) rotate(360deg) scale(0.8); }
+  100% { transform: translateY(110vh) rotate(720deg) scale(0.3); opacity: 0; }
+}
+
 /* ===== RESPONSIVE ===== */
 @media (min-width: 768px) {
   .couple-cards {
@@ -893,6 +922,9 @@ section {
   </div>
   <p class="open-text">Tap to Open</p>
 </div>
+
+<!-- CONFETTI -->
+<div class="confetti-container" id="confettiContainer"></div>
 
 <!-- FLOATING PARTICLES -->
 <div class="particles-container" id="particles"></div>
@@ -1111,10 +1143,12 @@ function openEnvelope() {
     mainContent.classList.add('visible');
     musicToggle.classList.add('visible');
     document.getElementById('hero').classList.add('animate');
+    launchConfetti();
     createParticles();
     startPetalFall();
     startCountdown();
     initRevealObserver();
+    startMusic();
   }, 1200);
 }
 
@@ -1198,12 +1232,154 @@ function initRevealObserver() {
   reveals.forEach(el => observer.observe(el));
 }
 
-// ===== MUSIC (placeholder) =====
+// ===== CONFETTI =====
+function launchConfetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#d4a853', '#e8c97a', '#6b1d2a', '#8c2f3f', '#f5efe6', '#ff6b8a', '#ffd700', '#ff4500'];
+  const shapes = ['square', 'circle', 'star'];
+
+  for (let i = 0; i < 150; i++) {
+    setTimeout(() => {
+      const piece = document.createElement('div');
+      piece.classList.add('confetti-piece');
+      const shape = shapes[Math.floor(Math.random() * shapes.length)];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const size = Math.random() * 10 + 6;
+
+      if (shape === 'star') {
+        piece.innerHTML = '<svg width="' + size * 2 + '" height="' + size * 2 + '" viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" fill="' + color + '"/></svg>';
+        piece.style.animation = 'confettiStar ' + (Math.random() * 3 + 2.5) + 's linear forwards';
+      } else {
+        piece.style.width = size + 'px';
+        piece.style.height = size + (shape === 'square' ? 0 : size * 0.6) + 'px';
+        piece.style.background = color;
+        piece.style.borderRadius = shape === 'circle' ? '50%' : '2px';
+        piece.style.animation = 'confettiFall ' + (Math.random() * 3 + 2.5) + 's linear forwards';
+      }
+
+      piece.style.left = Math.random() * 100 + '%';
+      piece.style.animationDelay = (Math.random() * 0.5) + 's';
+      container.appendChild(piece);
+
+      piece.addEventListener('animationend', () => piece.remove());
+    }, Math.random() * 800);
+  }
+
+  setTimeout(() => {
+    for (let i = 0; i < 80; i++) {
+      setTimeout(() => {
+        const piece = document.createElement('div');
+        piece.classList.add('confetti-piece');
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.random() * 8 + 4;
+        piece.style.width = size + 'px';
+        piece.style.height = size + 'px';
+        piece.style.background = color;
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.animation = 'confettiFall ' + (Math.random() * 3 + 3) + 's linear forwards';
+        container.appendChild(piece);
+        piece.addEventListener('animationend', () => piece.remove());
+      }, Math.random() * 600);
+    }
+  }, 1200);
+}
+
+// ===== MUSIC (Web Audio API) =====
+let audioCtx = null;
 let musicPlaying = false;
+let musicNodes = [];
+let musicInterval = null;
+
+function createMelody() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  const notes = [
+    { freq: 523.25, dur: 0.6 },
+    { freq: 587.33, dur: 0.4 },
+    { freq: 659.25, dur: 0.8 },
+    { freq: 587.33, dur: 0.4 },
+    { freq: 523.25, dur: 0.6 },
+    { freq: 493.88, dur: 0.5 },
+    { freq: 440.00, dur: 0.8 },
+    { freq: 392.00, dur: 0.6 },
+    { freq: 440.00, dur: 0.5 },
+    { freq: 493.88, dur: 0.4 },
+    { freq: 523.25, dur: 1.0 },
+    { freq: 440.00, dur: 0.6 },
+    { freq: 392.00, dur: 0.5 },
+    { freq: 349.23, dur: 0.8 },
+    { freq: 392.00, dur: 0.5 },
+    { freq: 440.00, dur: 0.4 },
+    { freq: 523.25, dur: 1.0 },
+  ];
+
+  let time = audioCtx.currentTime + 0.1;
+  notes.forEach(note => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const filter = audioCtx.createBiquadFilter();
+
+    osc.type = 'sine';
+    osc.frequency.value = note.freq;
+
+    filter.type = 'lowpass';
+    filter.frequency.value = 2000;
+
+    gain.gain.setValueAtTime(0, time);
+    gain.gain.linearRampToValueAtTime(0.08, time + 0.05);
+    gain.gain.setValueAtTime(0.08, time + note.dur * 0.7);
+    gain.gain.linearRampToValueAtTime(0, time + note.dur);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(time);
+    osc.stop(time + note.dur + 0.05);
+    musicNodes.push(osc);
+
+    const harm = audioCtx.createOscillator();
+    const harmGain = audioCtx.createGain();
+    harm.type = 'triangle';
+    harm.frequency.value = note.freq * 0.5;
+    harmGain.gain.setValueAtTime(0, time);
+    harmGain.gain.linearRampToValueAtTime(0.03, time + 0.05);
+    harmGain.gain.linearRampToValueAtTime(0, time + note.dur);
+    harm.connect(harmGain);
+    harmGain.connect(audioCtx.destination);
+    harm.start(time);
+    harm.stop(time + note.dur + 0.05);
+    musicNodes.push(harm);
+
+    time += note.dur;
+  });
+
+  return time - audioCtx.currentTime;
+}
+
+function startMusic() {
+  musicPlaying = true;
+  document.getElementById('musicToggle').classList.remove('paused');
+  const loopDuration = createMelody();
+  musicInterval = setInterval(() => {
+    if (musicPlaying) createMelody();
+  }, loopDuration * 1000);
+}
+
 function toggleMusic() {
   const btn = document.getElementById('musicToggle');
   musicPlaying = !musicPlaying;
   btn.classList.toggle('paused', !musicPlaying);
+  if (musicPlaying) {
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    createMelody();
+  } else {
+    if (musicInterval) clearInterval(musicInterval);
+    musicNodes.forEach(n => { try { n.stop(); } catch(e) {} });
+    musicNodes = [];
+  }
 }
 
 // ===== SMOOTH SCROLL FOR iOS =====
