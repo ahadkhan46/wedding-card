@@ -289,14 +289,26 @@ section {
   transition: none;
 }
 
-.wedding-label {
-  font-size: 14px;
-  letter-spacing: 6px;
-  text-transform: uppercase;
-  color: var(--gold);
+.host-line {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 6vw, 32px);
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: 8px;
+  opacity: 0;
+  transition: none;
+}
+
+.host-subline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(14px, 3.5vw, 18px);
+  font-style: italic;
+  color: var(--text-muted);
   margin-bottom: 20px;
   opacity: 0;
   transition: none;
+  max-width: 400px;
+  line-height: 1.5;
 }
 
 .hero-divider {
@@ -348,13 +360,14 @@ section {
 
 /* Hero animations triggered after envelope opens */
 .hero.animate .bismillah { animation: fadeInUp 1s ease forwards 0.3s; }
-.hero.animate .wedding-label { animation: fadeInUp 1s ease forwards 0.5s; }
-.hero.animate .hero-divider { animation: fadeInUp 1s ease forwards 0.6s; }
-.hero.animate .groom-name { animation: fadeInUp 1s ease forwards 0.8s; }
-.hero.animate .ampersand { animation: fadeInUp 1s ease forwards 1s; }
-.hero.animate .bride-name { animation: fadeInUp 1s ease forwards 1.2s; }
-.hero.animate .wedding-date-hero { animation: fadeInUp 1s ease forwards 1.4s; }
-.hero.animate .scroll-indicator { animation: fadeInUp 1s ease forwards 1.6s; }
+.hero.animate .host-line { animation: fadeInUp 1s ease forwards 0.5s; }
+.hero.animate .host-subline { animation: fadeInUp 1s ease forwards 0.7s; }
+.hero.animate .hero-divider { animation: fadeInUp 1s ease forwards 0.8s; }
+.hero.animate .groom-name { animation: fadeInUp 1s ease forwards 1s; }
+.hero.animate .ampersand { animation: fadeInUp 1s ease forwards 1.2s; }
+.hero.animate .bride-name { animation: fadeInUp 1s ease forwards 1.4s; }
+.hero.animate .wedding-date-hero { animation: fadeInUp 1s ease forwards 1.6s; }
+.hero.animate .scroll-indicator { animation: fadeInUp 1s ease forwards 1.8s; }
 
 .scroll-arrow {
   width: 24px;
@@ -912,7 +925,8 @@ section {
     </div>
 
     <p class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
-    <p class="wedding-label">Walima Invitation</p>
+    <p class="host-line">Mr. Qari Abdul Wahab</p>
+    <p class="host-subline">requests the honour of your presence at the Walima of his beloved son</p>
     <div class="hero-divider"></div>
     <h1 class="groom-name">Abdul Ahad</h1>
     <p class="ampersand">&</p>
@@ -1053,6 +1067,7 @@ section {
         <h2 class="section-title">R.S.V.P</h2>
         <div class="contact-list">
           <p>Jamil Ahmed Chitrali</p>
+          <p>Rehmat Ashraf</p>
           <p>M. Shakir</p>
           <p>Ijaz Ahmad</p>
         </div>
