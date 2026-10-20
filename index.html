@@ -1285,100 +1285,31 @@ function launchConfetti() {
   }, 1200);
 }
 
-// ===== MUSIC (Web Audio API) =====
-let audioCtx = null;
+// ===== MUSIC =====
+let bgAudio = null;
 let musicPlaying = false;
-let musicNodes = [];
-let musicInterval = null;
-
-function createMelody() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-
-  const notes = [
-    { freq: 523.25, dur: 0.6 },
-    { freq: 587.33, dur: 0.4 },
-    { freq: 659.25, dur: 0.8 },
-    { freq: 587.33, dur: 0.4 },
-    { freq: 523.25, dur: 0.6 },
-    { freq: 493.88, dur: 0.5 },
-    { freq: 440.00, dur: 0.8 },
-    { freq: 392.00, dur: 0.6 },
-    { freq: 440.00, dur: 0.5 },
-    { freq: 493.88, dur: 0.4 },
-    { freq: 523.25, dur: 1.0 },
-    { freq: 440.00, dur: 0.6 },
-    { freq: 392.00, dur: 0.5 },
-    { freq: 349.23, dur: 0.8 },
-    { freq: 392.00, dur: 0.5 },
-    { freq: 440.00, dur: 0.4 },
-    { freq: 523.25, dur: 1.0 },
-  ];
-
-  let time = audioCtx.currentTime + 0.1;
-  notes.forEach(note => {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    const filter = audioCtx.createBiquadFilter();
-
-    osc.type = 'sine';
-    osc.frequency.value = note.freq;
-
-    filter.type = 'lowpass';
-    filter.frequency.value = 2000;
-
-    gain.gain.setValueAtTime(0, time);
-    gain.gain.linearRampToValueAtTime(0.08, time + 0.05);
-    gain.gain.setValueAtTime(0.08, time + note.dur * 0.7);
-    gain.gain.linearRampToValueAtTime(0, time + note.dur);
-
-    osc.connect(filter);
-    filter.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start(time);
-    osc.stop(time + note.dur + 0.05);
-    musicNodes.push(osc);
-
-    const harm = audioCtx.createOscillator();
-    const harmGain = audioCtx.createGain();
-    harm.type = 'triangle';
-    harm.frequency.value = note.freq * 0.5;
-    harmGain.gain.setValueAtTime(0, time);
-    harmGain.gain.linearRampToValueAtTime(0.03, time + 0.05);
-    harmGain.gain.linearRampToValueAtTime(0, time + note.dur);
-    harm.connect(harmGain);
-    harmGain.connect(audioCtx.destination);
-    harm.start(time);
-    harm.stop(time + note.dur + 0.05);
-    musicNodes.push(harm);
-
-    time += note.dur;
-  });
-
-  return time - audioCtx.currentTime;
-}
 
 function startMusic() {
-  musicPlaying = true;
-  document.getElementById('musicToggle').classList.remove('paused');
-  const loopDuration = createMelody();
-  musicInterval = setInterval(() => {
-    if (musicPlaying) createMelody();
-  }, loopDuration * 1000);
+  bgAudio = new Audio('nasheed.mp3');
+  bgAudio.loop = true;
+  bgAudio.volume = 0.4;
+  bgAudio.play().then(() => {
+    musicPlaying = true;
+    document.getElementById('musicToggle').classList.remove('paused');
+  }).catch(() => {});
 }
 
 function toggleMusic() {
   const btn = document.getElementById('musicToggle');
-  musicPlaying = !musicPlaying;
-  btn.classList.toggle('paused', !musicPlaying);
+  if (!bgAudio) return;
   if (musicPlaying) {
-    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    createMelody();
+    bgAudio.pause();
+    musicPlaying = false;
+    btn.classList.add('paused');
   } else {
-    if (musicInterval) clearInterval(musicInterval);
-    musicNodes.forEach(n => { try { n.stop(); } catch(e) {} });
-    musicNodes = [];
+    bgAudio.play();
+    musicPlaying = true;
+    btn.classList.remove('paused');
   }
 }
 
