@@ -44,8 +44,8 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ===== DOOR OPENING SCREEN ===== */
-.door-screen {
+/* ===== CURTAIN REVEAL SCREEN ===== */
+.curtain-screen {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
@@ -54,172 +54,129 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: radial-gradient(ellipse at center, #2a0f14 0%, var(--bg-dark) 70%);
-  transition: opacity 0.8s ease 0.8s, visibility 0.8s ease 0.8s;
+  background: #0d0507;
   cursor: pointer;
   overflow: hidden;
+  transition: opacity 0.6s ease 1.2s, visibility 0.6s ease 1.2s;
 }
 
-.door-screen.hidden {
+.curtain-screen.hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
-.door-frame {
-  position: relative;
-  width: 280px;
-  height: 400px;
-  perspective: 1200px;
-}
-
-.door-arch {
+.curtain-left, .curtain-right {
   position: absolute;
-  top: -20px; left: -20px; right: -20px;
-  height: 60px;
-  border: 2px solid var(--gold);
-  border-bottom: none;
-  border-radius: 160px 160px 0 0;
-  opacity: 0.6;
+  top: -5%; bottom: -5%;
+  width: 52%;
+  z-index: 2;
+  transition: transform 1.4s cubic-bezier(0.4, 0, 0.1, 1);
 }
 
-.door-arch::after {
-  content: '';
-  position: absolute;
-  top: 8px; left: 8px; right: 8px;
-  height: 44px;
-  border: 1px solid var(--gold);
-  border-bottom: none;
-  border-radius: 150px 150px 0 0;
-  opacity: 0.4;
-}
-
-.door-left, .door-right {
-  position: absolute;
-  top: 0;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-deep) 100%);
-  border: 2px solid var(--gold);
-  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  backface-visibility: hidden;
-}
-
-.door-left {
+.curtain-left {
   left: 0;
+  background: linear-gradient(90deg, var(--burgundy-deep) 0%, var(--burgundy) 60%, var(--burgundy-light) 85%, rgba(140,47,63,0.6) 100%);
   transform-origin: left center;
-  border-radius: 4px 0 0 4px;
+  border-right: 3px solid rgba(212, 168, 83, 0.3);
 }
 
-.door-right {
+.curtain-right {
   right: 0;
+  background: linear-gradient(-90deg, var(--burgundy-deep) 0%, var(--burgundy) 60%, var(--burgundy-light) 85%, rgba(140,47,63,0.6) 100%);
   transform-origin: right center;
-  border-radius: 0 4px 4px 0;
+  border-left: 3px solid rgba(212, 168, 83, 0.3);
 }
 
-.door-panel-design {
+.curtain-fold {
   position: absolute;
-  top: 15%; left: 12%; right: 12%; bottom: 15%;
-  border: 1px solid rgba(212, 168, 83, 0.3);
-  border-radius: 4px;
+  top: 0; bottom: 0;
+  width: 30px;
+  opacity: 0.15;
 }
 
-.door-panel-design::before {
-  content: '';
+.curtain-left .curtain-fold { right: 30%; background: linear-gradient(90deg, transparent, rgba(0,0,0,0.3), transparent); }
+.curtain-left .curtain-fold:nth-child(2) { right: 55%; }
+.curtain-left .curtain-fold:nth-child(3) { right: 80%; }
+.curtain-right .curtain-fold { left: 30%; background: linear-gradient(90deg, transparent, rgba(0,0,0,0.3), transparent); }
+.curtain-right .curtain-fold:nth-child(2) { left: 55%; }
+.curtain-right .curtain-fold:nth-child(3) { left: 80%; }
+
+.curtain-tassel {
   position: absolute;
-  top: 10%; left: 10%; right: 10%; bottom: 10%;
-  border: 1px solid rgba(212, 168, 83, 0.2);
+  top: 35%;
+  width: 8px;
+  height: 60px;
+  z-index: 3;
+}
+
+.curtain-left .curtain-tassel { right: -4px; }
+.curtain-right .curtain-tassel { left: -4px; }
+
+.tassel-rope {
+  width: 3px;
+  height: 35px;
+  background: var(--gold);
+  margin: 0 auto;
   border-radius: 2px;
 }
 
-.door-panel-design::after {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30px; height: 30px;
-  border: 1px solid var(--gold);
-  border-radius: 50%;
-  opacity: 0.4;
+.tassel-body {
+  width: 8px;
+  height: 25px;
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dark) 100%);
+  border-radius: 0 0 4px 4px;
+  margin: 0 auto;
 }
 
-.door-handle {
-  position: absolute;
-  top: 50%;
-  width: 12px; height: 28px;
-  background: var(--gold);
-  border-radius: 6px;
-  transform: translateY(-50%);
-  box-shadow: 0 0 15px rgba(212, 168, 83, 0.5);
+.curtain-screen.opening .curtain-left {
+  transform: translateX(-92%);
 }
 
-.door-left .door-handle { right: 12px; }
-.door-right .door-handle { left: 12px; }
-
-.door-islamic-pattern {
-  position: absolute;
-  top: 8%; left: 50%;
-  transform: translateX(-50%);
-  width: 40px; height: 40px;
-  opacity: 0.5;
+.curtain-screen.opening .curtain-right {
+  transform: translateX(92%);
 }
 
-.door-screen.opening .door-left {
-  transform: perspective(1200px) rotateY(-105deg);
+.curtain-center-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  opacity: 0.9;
 }
 
-.door-screen.opening .door-right {
-  transform: perspective(1200px) rotateY(105deg);
+.curtain-bismillah {
+  font-size: 22px;
+  color: var(--gold);
+  margin-bottom: 20px;
+  opacity: 0.8;
 }
 
-.door-glow {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.3) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.8s ease 0.3s;
-  pointer-events: none;
-}
-
-.door-screen.opening .door-glow {
-  opacity: 1;
-}
-
-.door-invite-text {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.6s ease 0.4s;
-}
-
-.door-screen.opening .door-invite-text {
-  opacity: 1;
-}
-
-.door-invite-text span {
+.curtain-names {
   font-family: 'Great Vibes', cursive;
+  font-size: clamp(28px, 8vw, 48px);
   color: var(--gold-light);
-  font-size: 28px;
-  text-shadow: 0 0 30px rgba(212, 168, 83, 0.5);
+  text-shadow: 0 0 40px rgba(212, 168, 83, 0.4);
+  line-height: 1.3;
 }
 
-.door-invite-names {
-  font-family: 'Great Vibes', cursive;
-  color: var(--cream);
-  font-size: 18px;
-  margin-top: 8px;
+.curtain-names .with-text {
+  display: block;
+  font-size: clamp(20px, 5vw, 30px);
+  color: var(--gold);
+  margin: 5px 0;
 }
 
-.door-bottom-text {
-  margin-top: 30px;
+.curtain-subtitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 20px;
+}
+
+.curtain-tap {
+  margin-top: 50px;
   font-family: 'Cormorant Garamond', serif;
   font-size: 15px;
   color: var(--gold);
@@ -228,101 +185,92 @@ body {
   animation: pulse 2s ease-in-out infinite;
 }
 
-.door-sparkles {
+.curtain-glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(212, 168, 83, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+}
+
+.curtain-sparkles {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
   pointer-events: none;
-  overflow: hidden;
+  z-index: 0;
 }
 
-.door-sparkle {
+.curtain-sparkle {
   position: absolute;
-  width: 4px; height: 4px;
+  width: 3px; height: 3px;
   background: var(--gold);
   border-radius: 50%;
   opacity: 0;
-  animation: doorSparkle 2s ease-in-out infinite;
+  animation: sparkleFloat 3s ease-in-out infinite;
 }
 
-@keyframes doorSparkle {
-  0%, 100% { opacity: 0; transform: scale(0); }
-  50% { opacity: 1; transform: scale(1); }
+@keyframes sparkleFloat {
+  0%, 100% { opacity: 0; transform: scale(0) translateY(0); }
+  50% { opacity: 0.8; transform: scale(1) translateY(-10px); }
 }
+
+.curtain-rod {
+  position: absolute;
+  top: 0; left: -5%; right: -5%;
+  height: 12px;
+  background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold-dark) 50%, var(--gold) 100%);
+  z-index: 10;
+  border-radius: 6px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.curtain-rod::before, .curtain-rod::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  width: 20px; height: 20px;
+  background: var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(212, 168, 83, 0.5);
+}
+
+.curtain-rod::before { left: 2%; }
+.curtain-rod::after { right: 2%; }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.5; }
+  0%, 100% { opacity: 0.4; }
   50% { opacity: 1; }
 }
 
-/* ===== COUPLE SILHOUETTE ENTRY ===== */
-.couple-entry {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-  height: 200px;
-  margin-bottom: 30px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.silhouette {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.silhouette-groom {
-  animation: silhouetteEnterLeft 1.5s ease forwards 0.5s;
-}
-
-.silhouette-bride {
-  animation: silhouetteEnterRight 1.5s ease forwards 0.8s;
-}
-
-.couple-entry .spotlight {
+/* ===== ISLAMIC GEOMETRIC BORDER ===== */
+.islamic-border {
   position: absolute;
-  bottom: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 250px; height: 8px;
-  background: radial-gradient(ellipse, rgba(212,168,83,0.4) 0%, transparent 70%);
-  border-radius: 50%;
-  opacity: 0;
-  animation: spotlightOn 1s ease forwards 0.3s;
-}
-
-@keyframes silhouetteEnterLeft {
-  0% { opacity: 0; transform: translateX(-60px) translateY(20px); }
-  60% { opacity: 1; }
-  100% { opacity: 1; transform: translateX(0) translateY(0); }
-}
-
-@keyframes silhouetteEnterRight {
-  0% { opacity: 0; transform: translateX(60px) translateY(20px); }
-  60% { opacity: 1; }
-  100% { opacity: 1; transform: translateX(0) translateY(0); }
-}
-
-@keyframes spotlightOn {
-  from { opacity: 0; width: 100px; }
-  to { opacity: 1; width: 250px; }
-}
-
-/* ===== SPARKLE TRAIL ===== */
-.sparkle {
-  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
-  z-index: 50;
-  width: 6px; height: 6px;
-  background: var(--gold);
-  border-radius: 50%;
-  box-shadow: 0 0 6px var(--gold), 0 0 12px rgba(212,168,83,0.3);
-  animation: sparkleOut 0.8s ease forwards;
+  z-index: 1;
+  overflow: hidden;
 }
 
-@keyframes sparkleOut {
-  0% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0) translateY(-20px); }
+.islamic-border svg {
+  position: absolute;
+}
+
+.islamic-border .top-border {
+  top: 0; left: 0; width: 100%; height: 40px;
+}
+
+.islamic-border .bottom-border {
+  bottom: 0; left: 0; width: 100%; height: 40px;
+  transform: rotate(180deg);
 }
 
 /* ===== PARTICLES ===== */
@@ -359,6 +307,7 @@ body {
 
 .main-content.visible {
   display: block;
+  animation: fadeIn 1s ease;
 }
 
 /* ===== SECTION STYLES ===== */
@@ -453,6 +402,17 @@ section {
   transition: none;
 }
 
+.hero.animate .groom-name,
+.hero.animate .bride-name {
+  animation: nameGlow 3s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+@keyframes nameGlow {
+  0%, 100% { text-shadow: 0 0 20px rgba(212, 168, 83, 0.2); }
+  50% { text-shadow: 0 0 40px rgba(212, 168, 83, 0.5), 0 0 80px rgba(212, 168, 83, 0.2); }
+}
+
 .ampersand {
   font-family: 'Great Vibes', cursive;
   font-size: clamp(30px, 8vw, 50px);
@@ -481,14 +441,13 @@ section {
   transition: none;
 }
 
-/* Hero animations triggered after envelope opens */
 .hero.animate .bismillah { animation: fadeInUp 1s ease forwards 0.3s; }
 .hero.animate .host-line { animation: fadeInUp 1s ease forwards 0.5s; }
 .hero.animate .host-subline { animation: fadeInUp 1s ease forwards 0.7s; }
 .hero.animate .hero-divider { animation: fadeInUp 1s ease forwards 0.8s; }
-.hero.animate .groom-name { animation: fadeInUp 1s ease forwards 1s; }
+.hero.animate .groom-name { animation: fadeInUp 1s ease forwards 1s, nameGlow 3s ease-in-out infinite 2.5s; }
 .hero.animate .ampersand { animation: fadeInUp 1s ease forwards 1.2s; }
-.hero.animate .bride-name { animation: fadeInUp 1s ease forwards 1.4s; }
+.hero.animate .bride-name { animation: fadeInUp 1s ease forwards 1.4s, nameGlow 3s ease-in-out infinite 3s; }
 .hero.animate .wedding-date-hero { animation: fadeInUp 1s ease forwards 1.6s; }
 .hero.animate .scroll-indicator { animation: fadeInUp 1s ease forwards 1.8s; }
 
@@ -518,6 +477,39 @@ section {
   transform: translateY(0);
 }
 
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal-left.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal-right.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal-scale.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
 /* ===== COUPLE SECTION ===== */
 .couple-section {
   background: linear-gradient(180deg, var(--bg-dark) 0%, #1f0d10 50%, var(--bg-dark) 100%);
@@ -538,6 +530,81 @@ section {
   color: var(--text-muted);
   text-align: center;
   margin-bottom: 40px;
+}
+
+.couple-entry {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  height: 180px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+}
+
+.silhouette {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.couple-entry.active .silhouette-groom {
+  animation: silhouetteEnterLeft 1.5s ease forwards 0.3s;
+}
+
+.couple-entry.active .silhouette-bride {
+  animation: silhouetteEnterRight 1.5s ease forwards 0.6s;
+}
+
+.couple-entry .spotlight {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 200px; height: 6px;
+  background: radial-gradient(ellipse, rgba(212,168,83,0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.couple-entry.active .spotlight {
+  animation: spotlightOn 1s ease forwards 0.2s;
+}
+
+.couple-entry .heart-float {
+  position: absolute;
+  top: 20%; left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: var(--burgundy-light);
+  opacity: 0;
+}
+
+.couple-entry.active .heart-float {
+  animation: heartRise 2s ease forwards 1.5s;
+}
+
+@keyframes heartRise {
+  0% { opacity: 0; transform: translateX(-50%) translateY(0) scale(0.5); }
+  50% { opacity: 1; transform: translateX(-50%) translateY(-20px) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-50px) scale(0.8); }
+}
+
+@keyframes silhouetteEnterLeft {
+  0% { opacity: 0; transform: translateX(-50px) translateY(20px); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: translateX(0) translateY(0); }
+}
+
+@keyframes silhouetteEnterRight {
+  0% { opacity: 0; transform: translateX(50px) translateY(20px); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: translateX(0) translateY(0); }
+}
+
+@keyframes spotlightOn {
+  from { opacity: 0; width: 80px; }
+  to { opacity: 1; width: 200px; }
 }
 
 .couple-cards {
@@ -587,14 +654,6 @@ section {
   color: var(--text-muted);
   letter-spacing: 2px;
   text-transform: uppercase;
-}
-
-.couple-card .parent-names {
-  font-size: 16px;
-  color: var(--text-light);
-  margin-top: 10px;
-  font-style: italic;
-  line-height: 1.6;
 }
 
 /* ===== EVENT DETAILS ===== */
@@ -673,6 +732,12 @@ section {
   border-radius: 12px;
   padding: 16px 8px;
   text-align: center;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.countdown-box:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold);
 }
 
 .countdown-number {
@@ -901,12 +966,11 @@ section {
   font-size: 18px;
   cursor: pointer;
   z-index: 100;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(10px);
   transition: transform 0.3s ease;
-  display: none;
 }
 
 .music-toggle.visible {
@@ -960,16 +1024,10 @@ section {
 }
 
 @keyframes petalFall {
-  0% {
-    transform: translateY(-10vh) rotate(0deg) translateX(0);
-    opacity: 0;
-  }
+  0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
   10% { opacity: 0.7; }
   90% { opacity: 0.7; }
-  100% {
-    transform: translateY(110vh) rotate(720deg) translateX(100px);
-    opacity: 0;
-  }
+  100% { transform: translateY(110vh) rotate(720deg) translateX(100px); opacity: 0; }
 }
 
 /* ===== CONFETTI ===== */
@@ -986,7 +1044,6 @@ section {
   position: absolute;
   top: -10px;
   opacity: 0;
-  animation: confettiFall linear forwards;
 }
 
 @keyframes confettiFall {
@@ -999,6 +1056,31 @@ section {
   0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
   50% { opacity: 1; transform: translateY(55vh) rotate(360deg) scale(0.8); }
   100% { transform: translateY(110vh) rotate(720deg) scale(0.3); opacity: 0; }
+}
+
+/* ===== SPARKLE TRAIL ===== */
+.sparkle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 50;
+  width: 6px; height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--gold), 0 0 12px rgba(212,168,83,0.3);
+  animation: sparkleOut 0.8s ease forwards;
+}
+
+@keyframes sparkleOut {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0) translateY(-20px); }
+}
+
+/* ===== SECTION DIVIDER ===== */
+.section-divider {
+  width: 180px;
+  height: 30px;
+  margin: 0 auto;
+  opacity: 0.4;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -1026,39 +1108,45 @@ section {
   .contact-card {
     flex: 1;
   }
+
+  .couple-entry {
+    max-width: 500px;
+    height: 220px;
+  }
 }
 </style>
 </head>
 <body>
 
-<!-- DOOR OPENING SCREEN -->
-<div class="door-screen" id="doorScreen" onclick="openDoors()">
-  <div class="door-sparkles" id="doorSparkles"></div>
-  <div class="door-frame">
-    <div class="door-arch"></div>
-    <div class="door-left">
-      <div class="door-panel-design"></div>
-      <div class="door-handle"></div>
-      <svg class="door-islamic-pattern" viewBox="0 0 40 40">
-        <polygon points="20,2 26,14 38,16 29,25 31,38 20,32 9,38 11,25 2,16 14,14" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6"/>
-        <circle cx="20" cy="20" r="6" fill="none" stroke="var(--gold)" stroke-width="0.5" opacity="0.4"/>
-      </svg>
+<!-- CURTAIN REVEAL SCREEN -->
+<div class="curtain-screen" id="curtainScreen" onclick="openCurtains()">
+  <div class="curtain-rod"></div>
+  <div class="curtain-sparkles" id="curtainSparkles"></div>
+  <div class="curtain-glow"></div>
+
+  <div class="curtain-center-content">
+    <p class="curtain-bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
+    <div class="curtain-names">
+      Abdul Ahad
+      <span class="with-text">with</span>
+      Tahira Aziz
     </div>
-    <div class="door-right">
-      <div class="door-panel-design"></div>
-      <div class="door-handle"></div>
-      <svg class="door-islamic-pattern" viewBox="0 0 40 40">
-        <polygon points="20,2 26,14 38,16 29,25 31,38 20,32 9,38 11,25 2,16 14,14" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6"/>
-        <circle cx="20" cy="20" r="6" fill="none" stroke="var(--gold)" stroke-width="0.5" opacity="0.4"/>
-      </svg>
-    </div>
-    <div class="door-glow"></div>
-    <div class="door-invite-text">
-      <span>You're Invited</span>
-      <span class="door-invite-names">Abdul Ahad with Tahira Aziz</span>
-    </div>
+    <p class="curtain-subtitle">Walima Invitation</p>
+    <p class="curtain-tap">Tap to Open</p>
   </div>
-  <p class="door-bottom-text">Tap to Open</p>
+
+  <div class="curtain-left">
+    <div class="curtain-fold"></div>
+    <div class="curtain-fold"></div>
+    <div class="curtain-fold"></div>
+    <div class="curtain-tassel"><div class="tassel-rope"></div><div class="tassel-body"></div></div>
+  </div>
+  <div class="curtain-right">
+    <div class="curtain-fold"></div>
+    <div class="curtain-fold"></div>
+    <div class="curtain-fold"></div>
+    <div class="curtain-tassel"><div class="tassel-rope"></div><div class="tassel-body"></div></div>
+  </div>
 </div>
 
 <!-- CONFETTI -->
@@ -1085,7 +1173,6 @@ section {
     <div class="corner-borders"></div>
     <div class="corner-borders-bottom"></div>
 
-    <!-- Top ornament -->
     <div class="hero-ornament-top">
       <svg class="ornament-svg" viewBox="0 0 200 200">
         <path d="M100 180 C100 180, 30 140, 30 100 C30 60, 60 40, 100 60 C140 40, 170 60, 170 100 C170 140, 100 180, 100 180Z" fill="none" stroke="currentColor" stroke-width="1" color="var(--gold)"/>
@@ -1108,7 +1195,6 @@ section {
       <div class="scroll-arrow"></div>
     </div>
 
-    <!-- Bottom ornament -->
     <div class="hero-ornament-bottom">
       <svg class="ornament-svg" viewBox="0 0 200 200">
         <path d="M100 180 C100 180, 30 140, 30 100 C30 60, 60 40, 100 60 C140 40, 170 60, 170 100 C170 140, 100 180, 100 180Z" fill="none" stroke="currentColor" stroke-width="1" color="var(--gold)"/>
@@ -1125,29 +1211,29 @@ section {
     <h2 class="section-title reveal">The Couple</h2>
     <p class="section-subtitle reveal">Together with their families</p>
 
-    <div class="couple-entry reveal">
+    <div class="couple-entry reveal-scale">
       <div class="spotlight"></div>
-      <svg class="silhouette silhouette-groom" width="120" height="180" viewBox="0 0 120 180">
-        <ellipse cx="60" cy="28" rx="18" ry="22" fill="var(--gold)" opacity="0.7"/>
-        <rect x="38" y="48" width="44" height="60" rx="8" fill="var(--gold)" opacity="0.5"/>
-        <rect x="32" y="52" width="12" height="45" rx="4" fill="var(--gold)" opacity="0.4"/>
-        <rect x="76" y="52" width="12" height="45" rx="4" fill="var(--gold)" opacity="0.4"/>
-        <rect x="40" y="108" width="16" height="55" rx="5" fill="var(--gold)" opacity="0.45"/>
-        <rect x="64" y="108" width="16" height="55" rx="5" fill="var(--gold)" opacity="0.45"/>
-        <rect x="34" y="48" width="52" height="12" rx="3" fill="var(--gold)" opacity="0.35"/>
-        <rect x="50" y="60" width="4" height="40" fill="var(--gold-light)" opacity="0.3"/>
+      <svg class="silhouette silhouette-groom" width="100" height="160" viewBox="0 0 100 160">
+        <ellipse cx="50" cy="24" rx="15" ry="19" fill="var(--gold)" opacity="0.6"/>
+        <rect x="32" y="42" width="36" height="50" rx="6" fill="var(--gold)" opacity="0.4"/>
+        <rect x="26" y="46" width="10" height="38" rx="4" fill="var(--gold)" opacity="0.3"/>
+        <rect x="64" y="46" width="10" height="38" rx="4" fill="var(--gold)" opacity="0.3"/>
+        <rect x="34" y="92" width="13" height="48" rx="4" fill="var(--gold)" opacity="0.35"/>
+        <rect x="53" y="92" width="13" height="48" rx="4" fill="var(--gold)" opacity="0.35"/>
+        <rect x="42" y="52" width="3" height="32" fill="var(--gold-light)" opacity="0.25"/>
       </svg>
-      <svg class="silhouette silhouette-bride" width="140" height="180" viewBox="0 0 140 180">
-        <ellipse cx="70" cy="26" rx="17" ry="21" fill="var(--gold)" opacity="0.7"/>
-        <path d="M45 45 Q70 42 95 45 L105 130 Q70 140 35 130 Z" fill="var(--gold)" opacity="0.45"/>
-        <path d="M35 130 Q70 145 105 130 L115 175 Q70 185 25 175 Z" fill="var(--gold)" opacity="0.35"/>
-        <ellipse cx="70" cy="15" rx="22" ry="8" fill="var(--gold)" opacity="0.25"/>
-        <path d="M52 10 Q70 -5 88 10" fill="none" stroke="var(--gold)" stroke-width="1.5" opacity="0.3"/>
+      <div class="heart-float">&#10084;</div>
+      <svg class="silhouette silhouette-bride" width="110" height="160" viewBox="0 0 110 160">
+        <ellipse cx="55" cy="22" rx="14" ry="18" fill="var(--gold)" opacity="0.6"/>
+        <path d="M35 38 Q55 35 75 38 L82 105 Q55 112 28 105 Z" fill="var(--gold)" opacity="0.35"/>
+        <path d="M28 105 Q55 115 82 105 L90 155 Q55 165 20 155 Z" fill="var(--gold)" opacity="0.25"/>
+        <ellipse cx="55" cy="12" rx="18" ry="6" fill="var(--gold)" opacity="0.2"/>
+        <path d="M42 8 Q55 -4 68 8" fill="none" stroke="var(--gold)" stroke-width="1.2" opacity="0.25"/>
       </svg>
     </div>
 
     <div class="couple-cards">
-      <div class="couple-card reveal">
+      <div class="couple-card reveal-left">
         <div class="couple-card-icon">
           <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
         </div>
@@ -1155,7 +1241,7 @@ section {
         <p class="relation">The Groom</p>
       </div>
 
-      <div class="couple-card reveal">
+      <div class="couple-card reveal-right">
         <div class="couple-card-icon">
           <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
         </div>
@@ -1174,7 +1260,7 @@ section {
     <p class="section-subtitle reveal">Join us in celebration</p>
 
     <div class="event-cards">
-      <div class="event-card reveal">
+      <div class="event-card reveal-scale">
         <h3>Walima Reception</h3>
         <div class="event-detail">
           <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg>
@@ -1204,7 +1290,7 @@ section {
     <h2 class="section-title reveal">Counting Down</h2>
     <p class="section-subtitle reveal">To our special day</p>
 
-    <div class="countdown-container reveal">
+    <div class="countdown-container reveal-scale">
       <div class="countdown-box">
         <div class="countdown-number" id="days">00</div>
         <div class="countdown-label">Days</div>
@@ -1232,7 +1318,7 @@ section {
     <h2 class="section-title reveal">Venue</h2>
     <p class="section-subtitle reveal">Where to find us</p>
 
-    <div class="venue-info reveal">
+    <div class="venue-info reveal-scale">
       <svg width="60" height="60" viewBox="0 0 24 24" fill="var(--gold)" opacity="0.8">
         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
       </svg>
@@ -1254,14 +1340,14 @@ section {
     <div class="corner-borders-bottom"></div>
 
     <div class="contacts-wrapper">
-      <div class="contact-card reveal">
+      <div class="contact-card reveal-left">
         <h2 class="section-title">R.S.V.P</h2>
         <div class="contact-list">
           <p>All Family Members</p>
         </div>
       </div>
 
-      <div class="contact-card reveal">
+      <div class="contact-card reveal-right">
         <h2 class="section-title">Looking Forward</h2>
         <div class="contact-list">
           <p>Abdul Hayee</p>
@@ -1278,21 +1364,21 @@ section {
 
   <!-- FOOTER -->
   <section class="footer">
-    <p class="footer-names">Abdul Ahad & Tahira Aziz</p>
-    <p class="footer-message">"And among His signs is that He created for you mates from among yourselves, that you may dwell in tranquility with them."</p>
-    <p style="color: var(--text-muted); font-size: 13px; margin-top: 5px;">— Quran 30:21</p>
-    <div class="footer-heart">&#10084;</div>
+    <p class="footer-names reveal">Abdul Ahad & Tahira Aziz</p>
+    <p class="footer-message reveal">"And among His signs is that He created for you mates from among yourselves, that you may dwell in tranquility with them."</p>
+    <p class="reveal" style="color: var(--text-muted); font-size: 13px; margin-top: 5px;">— Quran 30:21</p>
+    <div class="footer-heart reveal">&#10084;</div>
   </section>
 
 </div>
 
 <script>
-// ===== DOOR OPENING =====
-let doorOpened = false;
-function openDoors() {
-  if (doorOpened) return;
-  doorOpened = true;
-  const screen = document.getElementById('doorScreen');
+// ===== CURTAIN OPENING =====
+let curtainOpened = false;
+function openCurtains() {
+  if (curtainOpened) return;
+  curtainOpened = true;
+  const screen = document.getElementById('curtainScreen');
   const mainContent = document.getElementById('mainContent');
   const musicToggle = document.getElementById('musicToggle');
 
@@ -1310,20 +1396,20 @@ function openDoors() {
     initRevealObserver();
     startMusic();
     initSparkleTrail();
-  }, 1800);
+  }, 1600);
 }
 
-// Door sparkles on load
+// Curtain sparkles on load
 (function() {
-  const container = document.getElementById('doorSparkles');
+  const container = document.getElementById('curtainSparkles');
   if (!container) return;
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 25; i++) {
     const s = document.createElement('div');
-    s.classList.add('door-sparkle');
-    s.style.left = (10 + Math.random() * 80) + '%';
+    s.classList.add('curtain-sparkle');
+    s.style.left = (15 + Math.random() * 70) + '%';
     s.style.top = (10 + Math.random() * 80) + '%';
-    s.style.animationDelay = (Math.random() * 3) + 's';
-    s.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    s.style.animationDelay = (Math.random() * 4) + 's';
+    s.style.animationDuration = (2 + Math.random() * 2) + 's';
     container.appendChild(s);
   }
 })();
@@ -1356,10 +1442,8 @@ function startPetalFall() {
     petal.style.left = Math.random() * 100 + '%';
     petal.style.animation = 'petalFall ' + (Math.random() * 6 + 6) + 's linear forwards';
     document.body.appendChild(petal);
-
     petal.addEventListener('animationend', () => petal.remove());
   }
-
   setInterval(createPetal, 1500);
 }
 
@@ -1396,7 +1480,7 @@ function startCountdown() {
 
 // ===== SCROLL REVEAL =====
 function initRevealObserver() {
-  const reveals = document.querySelectorAll('.reveal');
+  const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -1436,7 +1520,6 @@ function launchConfetti() {
       piece.style.left = Math.random() * 100 + '%';
       piece.style.animationDelay = (Math.random() * 0.5) + 's';
       container.appendChild(piece);
-
       piece.addEventListener('animationend', () => piece.remove());
     }, Math.random() * 800);
   }
