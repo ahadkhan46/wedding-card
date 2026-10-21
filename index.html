@@ -44,8 +44,8 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ===== ENVELOPE / OPENING SCREEN ===== */
-.envelope-screen {
+/* ===== DOOR OPENING SCREEN ===== */
+.door-screen {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
@@ -55,151 +55,274 @@ body {
   justify-content: center;
   flex-direction: column;
   background: radial-gradient(ellipse at center, #2a0f14 0%, var(--bg-dark) 70%);
-  transition: opacity 0.8s ease, visibility 0.8s ease;
+  transition: opacity 0.8s ease 0.8s, visibility 0.8s ease 0.8s;
+  cursor: pointer;
+  overflow: hidden;
 }
 
-.envelope-screen.hidden {
+.door-screen.hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
-.envelope-wrapper {
+.door-frame {
   position: relative;
   width: 280px;
-  height: 200px;
-  cursor: pointer;
-  animation: envelopeFloat 3s ease-in-out infinite;
+  height: 400px;
+  perspective: 1200px;
 }
 
-@keyframes envelopeFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
-}
-
-.envelope-body {
+.door-arch {
   position: absolute;
-  bottom: 0;
-  width: 280px;
-  height: 160px;
-  background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-deep) 100%);
-  border-radius: 0 0 8px 8px;
-  border: 2px solid var(--gold);
-  border-top: none;
-  z-index: 2;
-  overflow: hidden;
-}
-
-.envelope-body::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
+  top: -20px; left: -20px; right: -20px;
   height: 60px;
   border: 2px solid var(--gold);
+  border-bottom: none;
+  border-radius: 160px 160px 0 0;
+  opacity: 0.6;
+}
+
+.door-arch::after {
+  content: '';
+  position: absolute;
+  top: 8px; left: 8px; right: 8px;
+  height: 44px;
+  border: 1px solid var(--gold);
+  border-bottom: none;
+  border-radius: 150px 150px 0 0;
+  opacity: 0.4;
+}
+
+.door-left, .door-right {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-deep) 100%);
+  border: 2px solid var(--gold);
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.door-left {
+  left: 0;
+  transform-origin: left center;
+  border-radius: 4px 0 0 4px;
+}
+
+.door-right {
+  right: 0;
+  transform-origin: right center;
+  border-radius: 0 4px 4px 0;
+}
+
+.door-panel-design {
+  position: absolute;
+  top: 15%; left: 12%; right: 12%; bottom: 15%;
+  border: 1px solid rgba(212, 168, 83, 0.3);
+  border-radius: 4px;
+}
+
+.door-panel-design::before {
+  content: '';
+  position: absolute;
+  top: 10%; left: 10%; right: 10%; bottom: 10%;
+  border: 1px solid rgba(212, 168, 83, 0.2);
+  border-radius: 2px;
+}
+
+.door-panel-design::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px; height: 30px;
+  border: 1px solid var(--gold);
   border-radius: 50%;
   opacity: 0.4;
 }
 
-.envelope-seal {
+.door-handle {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40px;
-  height: 40px;
+  width: 12px; height: 28px;
   background: var(--gold);
-  border-radius: 50%;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Great Vibes', cursive;
-  font-size: 20px;
-  color: var(--burgundy-deep);
-  box-shadow: 0 0 20px rgba(212, 168, 83, 0.5);
+  border-radius: 6px;
+  transform: translateY(-50%);
+  box-shadow: 0 0 15px rgba(212, 168, 83, 0.5);
 }
 
-.envelope-flap {
+.door-left .door-handle { right: 12px; }
+.door-right .door-handle { left: 12px; }
+
+.door-islamic-pattern {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-left: 140px solid transparent;
-  border-right: 140px solid transparent;
-  border-top: 100px solid var(--burgundy);
-  z-index: 3;
-  transform-origin: top;
-  transition: transform 0.6s ease;
-  filter: brightness(1.1);
+  top: 8%; left: 50%;
+  transform: translateX(-50%);
+  width: 40px; height: 40px;
+  opacity: 0.5;
 }
 
-.envelope-flap::after {
-  content: '';
-  position: absolute;
-  top: -100px;
-  left: -140px;
-  width: 0;
-  height: 0;
-  border-left: 140px solid transparent;
-  border-right: 140px solid transparent;
-  border-top: 100px solid var(--gold);
-  opacity: 0.15;
+.door-screen.opening .door-left {
+  transform: perspective(1200px) rotateY(-105deg);
 }
 
-.envelope-card {
+.door-screen.opening .door-right {
+  transform: perspective(1200px) rotateY(105deg);
+}
+
+.door-glow {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 240px;
-  height: 140px;
-  background: var(--cream);
-  border-radius: 4px;
-  z-index: 1;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.3) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.8s ease 0.3s;
+  pointer-events: none;
+}
+
+.door-screen.opening .door-glow {
+  opacity: 1;
+}
+
+.door-invite-text {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  transition: transform 0.6s ease 0.3s;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.6s ease 0.4s;
 }
 
-.envelope-card-text {
+.door-screen.opening .door-invite-text {
+  opacity: 1;
+}
+
+.door-invite-text span {
   font-family: 'Great Vibes', cursive;
-  color: var(--burgundy);
-  font-size: 20px;
+  color: var(--gold-light);
+  font-size: 28px;
+  text-shadow: 0 0 30px rgba(212, 168, 83, 0.5);
 }
 
-.envelope-card-names {
+.door-invite-names {
   font-family: 'Great Vibes', cursive;
-  color: var(--gold-dark);
-  font-size: 16px;
-  margin-top: 4px;
+  color: var(--cream);
+  font-size: 18px;
+  margin-top: 8px;
 }
 
-.envelope-wrapper.opening .envelope-flap {
-  transform: rotateX(180deg);
-}
-
-.envelope-wrapper.opening .envelope-card {
-  transform: translateY(-80px);
-}
-
-.open-text {
-  margin-top: 40px;
+.door-bottom-text {
+  margin-top: 30px;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 16px;
+  font-size: 15px;
   color: var(--gold);
   letter-spacing: 3px;
   text-transform: uppercase;
   animation: pulse 2s ease-in-out infinite;
 }
 
+.door-sparkles {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.door-sparkle {
+  position: absolute;
+  width: 4px; height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  opacity: 0;
+  animation: doorSparkle 2s ease-in-out infinite;
+}
+
+@keyframes doorSparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
 @keyframes pulse {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
+}
+
+/* ===== COUPLE SILHOUETTE ENTRY ===== */
+.couple-entry {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 200px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.silhouette {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.silhouette-groom {
+  animation: silhouetteEnterLeft 1.5s ease forwards 0.5s;
+}
+
+.silhouette-bride {
+  animation: silhouetteEnterRight 1.5s ease forwards 0.8s;
+}
+
+.couple-entry .spotlight {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 250px; height: 8px;
+  background: radial-gradient(ellipse, rgba(212,168,83,0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+  animation: spotlightOn 1s ease forwards 0.3s;
+}
+
+@keyframes silhouetteEnterLeft {
+  0% { opacity: 0; transform: translateX(-60px) translateY(20px); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: translateX(0) translateY(0); }
+}
+
+@keyframes silhouetteEnterRight {
+  0% { opacity: 0; transform: translateX(60px) translateY(20px); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: translateX(0) translateY(0); }
+}
+
+@keyframes spotlightOn {
+  from { opacity: 0; width: 100px; }
+  to { opacity: 1; width: 250px; }
+}
+
+/* ===== SPARKLE TRAIL ===== */
+.sparkle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 50;
+  width: 6px; height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--gold), 0 0 12px rgba(212,168,83,0.3);
+  animation: sparkleOut 0.8s ease forwards;
+}
+
+@keyframes sparkleOut {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0) translateY(-20px); }
 }
 
 /* ===== PARTICLES ===== */
@@ -908,19 +1031,34 @@ section {
 </head>
 <body>
 
-<!-- ENVELOPE OPENING SCREEN -->
-<div class="envelope-screen" id="envelopeScreen">
-  <div class="envelope-wrapper" id="envelope" onclick="openEnvelope()">
-    <div class="envelope-flap"></div>
-    <div class="envelope-card">
-      <span class="envelope-card-text">You're Invited</span>
-      <span class="envelope-card-names">Abdul Ahad & Tahira Aziz</span>
+<!-- DOOR OPENING SCREEN -->
+<div class="door-screen" id="doorScreen" onclick="openDoors()">
+  <div class="door-sparkles" id="doorSparkles"></div>
+  <div class="door-frame">
+    <div class="door-arch"></div>
+    <div class="door-left">
+      <div class="door-panel-design"></div>
+      <div class="door-handle"></div>
+      <svg class="door-islamic-pattern" viewBox="0 0 40 40">
+        <polygon points="20,2 26,14 38,16 29,25 31,38 20,32 9,38 11,25 2,16 14,14" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6"/>
+        <circle cx="20" cy="20" r="6" fill="none" stroke="var(--gold)" stroke-width="0.5" opacity="0.4"/>
+      </svg>
     </div>
-    <div class="envelope-body">
-      <div class="envelope-seal">A</div>
+    <div class="door-right">
+      <div class="door-panel-design"></div>
+      <div class="door-handle"></div>
+      <svg class="door-islamic-pattern" viewBox="0 0 40 40">
+        <polygon points="20,2 26,14 38,16 29,25 31,38 20,32 9,38 11,25 2,16 14,14" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.6"/>
+        <circle cx="20" cy="20" r="6" fill="none" stroke="var(--gold)" stroke-width="0.5" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="door-glow"></div>
+    <div class="door-invite-text">
+      <span>You're Invited</span>
+      <span class="door-invite-names">Abdul Ahad with Tahira Aziz</span>
     </div>
   </div>
-  <p class="open-text">Tap to Open</p>
+  <p class="door-bottom-text">Tap to Open</p>
 </div>
 
 <!-- CONFETTI -->
@@ -986,6 +1124,27 @@ section {
 
     <h2 class="section-title reveal">The Couple</h2>
     <p class="section-subtitle reveal">Together with their families</p>
+
+    <div class="couple-entry reveal">
+      <div class="spotlight"></div>
+      <svg class="silhouette silhouette-groom" width="120" height="180" viewBox="0 0 120 180">
+        <ellipse cx="60" cy="28" rx="18" ry="22" fill="var(--gold)" opacity="0.7"/>
+        <rect x="38" y="48" width="44" height="60" rx="8" fill="var(--gold)" opacity="0.5"/>
+        <rect x="32" y="52" width="12" height="45" rx="4" fill="var(--gold)" opacity="0.4"/>
+        <rect x="76" y="52" width="12" height="45" rx="4" fill="var(--gold)" opacity="0.4"/>
+        <rect x="40" y="108" width="16" height="55" rx="5" fill="var(--gold)" opacity="0.45"/>
+        <rect x="64" y="108" width="16" height="55" rx="5" fill="var(--gold)" opacity="0.45"/>
+        <rect x="34" y="48" width="52" height="12" rx="3" fill="var(--gold)" opacity="0.35"/>
+        <rect x="50" y="60" width="4" height="40" fill="var(--gold-light)" opacity="0.3"/>
+      </svg>
+      <svg class="silhouette silhouette-bride" width="140" height="180" viewBox="0 0 140 180">
+        <ellipse cx="70" cy="26" rx="17" ry="21" fill="var(--gold)" opacity="0.7"/>
+        <path d="M45 45 Q70 42 95 45 L105 130 Q70 140 35 130 Z" fill="var(--gold)" opacity="0.45"/>
+        <path d="M35 130 Q70 145 105 130 L115 175 Q70 185 25 175 Z" fill="var(--gold)" opacity="0.35"/>
+        <ellipse cx="70" cy="15" rx="22" ry="8" fill="var(--gold)" opacity="0.25"/>
+        <path d="M52 10 Q70 -5 88 10" fill="none" stroke="var(--gold)" stroke-width="1.5" opacity="0.3"/>
+      </svg>
+    </div>
 
     <div class="couple-cards">
       <div class="couple-card reveal">
@@ -1128,14 +1287,16 @@ section {
 </div>
 
 <script>
-// ===== ENVELOPE OPENING =====
-function openEnvelope() {
-  const envelope = document.getElementById('envelope');
-  const screen = document.getElementById('envelopeScreen');
+// ===== DOOR OPENING =====
+let doorOpened = false;
+function openDoors() {
+  if (doorOpened) return;
+  doorOpened = true;
+  const screen = document.getElementById('doorScreen');
   const mainContent = document.getElementById('mainContent');
   const musicToggle = document.getElementById('musicToggle');
 
-  envelope.classList.add('opening');
+  screen.classList.add('opening');
 
   setTimeout(() => {
     screen.classList.add('hidden');
@@ -1148,8 +1309,24 @@ function openEnvelope() {
     startCountdown();
     initRevealObserver();
     startMusic();
-  }, 1200);
+    initSparkleTrail();
+  }, 1800);
 }
+
+// Door sparkles on load
+(function() {
+  const container = document.getElementById('doorSparkles');
+  if (!container) return;
+  for (let i = 0; i < 20; i++) {
+    const s = document.createElement('div');
+    s.classList.add('door-sparkle');
+    s.style.left = (10 + Math.random() * 80) + '%';
+    s.style.top = (10 + Math.random() * 80) + '%';
+    s.style.animationDelay = (Math.random() * 3) + 's';
+    s.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    container.appendChild(s);
+  }
+})();
 
 // ===== PARTICLES =====
 function createParticles() {
@@ -1310,6 +1487,27 @@ function toggleMusic() {
     musicPlaying = true;
     btn.classList.remove('paused');
   }
+}
+
+// ===== SPARKLE TRAIL =====
+function initSparkleTrail() {
+  let lastSparkle = 0;
+  function addSparkle(x, y) {
+    const now = Date.now();
+    if (now - lastSparkle < 50) return;
+    lastSparkle = now;
+    const sparkle = document.createElement('div');
+    sparkle.classList.add('sparkle');
+    sparkle.style.left = (x - 3) + 'px';
+    sparkle.style.top = (y - 3) + 'px';
+    document.body.appendChild(sparkle);
+    sparkle.addEventListener('animationend', () => sparkle.remove());
+  }
+  document.addEventListener('mousemove', e => addSparkle(e.clientX, e.clientY));
+  document.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    addSparkle(t.clientX, t.clientY);
+  }, { passive: true });
 }
 
 // ===== SMOOTH SCROLL FOR iOS =====
