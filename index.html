@@ -44,8 +44,8 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ===== CURTAIN REVEAL SCREEN ===== */
-.curtain-screen {
+/* ===== DOOR REVEAL SCREEN ===== */
+.door-screen {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
@@ -54,163 +54,224 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: #0d0507;
+  background: radial-gradient(ellipse at center, #2a0f14 0%, #0d0507 70%);
   cursor: pointer;
   overflow: hidden;
-  transition: opacity 0.6s ease 1.2s, visibility 0.6s ease 1.2s;
+  transition: opacity 0.8s ease 1.4s, visibility 0.8s ease 1.4s;
 }
 
-.curtain-screen.hidden {
+.door-screen.hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
-.curtain-left, .curtain-right {
-  position: absolute;
-  top: -5%; bottom: -5%;
-  width: 52%;
-  z-index: 2;
-  pointer-events: none;
-  transition: transform 1.4s cubic-bezier(0.4, 0, 0.1, 1);
-}
-
-.curtain-left {
-  left: 0;
-  background: linear-gradient(90deg, var(--burgundy-deep) 0%, var(--burgundy) 60%, var(--burgundy-light) 85%, rgba(140,47,63,0.6) 100%);
-  transform-origin: left center;
-  border-right: 3px solid rgba(212, 168, 83, 0.3);
-}
-
-.curtain-right {
-  right: 0;
-  background: linear-gradient(-90deg, var(--burgundy-deep) 0%, var(--burgundy) 60%, var(--burgundy-light) 85%, rgba(140,47,63,0.6) 100%);
-  transform-origin: right center;
-  border-left: 3px solid rgba(212, 168, 83, 0.3);
-}
-
-.curtain-fold {
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 30px;
-  opacity: 0.15;
-}
-
-.curtain-left .curtain-fold { right: 30%; background: linear-gradient(90deg, transparent, rgba(0,0,0,0.3), transparent); }
-.curtain-left .curtain-fold:nth-child(2) { right: 55%; }
-.curtain-left .curtain-fold:nth-child(3) { right: 80%; }
-.curtain-right .curtain-fold { left: 30%; background: linear-gradient(90deg, transparent, rgba(0,0,0,0.3), transparent); }
-.curtain-right .curtain-fold:nth-child(2) { left: 55%; }
-.curtain-right .curtain-fold:nth-child(3) { left: 80%; }
-
-.curtain-tassel {
-  position: absolute;
-  top: 35%;
-  width: 8px;
-  height: 60px;
-  z-index: 3;
-}
-
-.curtain-left .curtain-tassel { right: -4px; }
-.curtain-right .curtain-tassel { left: -4px; }
-
-.tassel-rope {
-  width: 3px;
-  height: 35px;
-  background: var(--gold);
-  margin: 0 auto;
-  border-radius: 2px;
-}
-
-.tassel-body {
-  width: 8px;
-  height: 25px;
-  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dark) 100%);
-  border-radius: 0 0 4px 4px;
-  margin: 0 auto;
-}
-
-.curtain-screen.opening .curtain-left {
-  transform: translateX(-92%);
-}
-
-.curtain-screen.opening .curtain-right {
-  transform: translateX(92%);
-}
-
-.curtain-center-content {
+/* Top content above doors */
+.door-top-content {
   position: relative;
-  z-index: 1;
+  z-index: 10;
   text-align: center;
-  opacity: 0.9;
-}
-
-.curtain-bismillah {
-  font-size: 22px;
-  color: var(--gold);
   margin-bottom: 20px;
-  opacity: 0.8;
 }
 
-.curtain-names {
+.door-bismillah {
+  font-size: 24px;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.door-names {
   font-family: 'Great Vibes', cursive;
-  font-size: clamp(28px, 8vw, 48px);
+  font-size: clamp(32px, 9vw, 54px);
   color: var(--gold-light);
-  text-shadow: 0 0 40px rgba(212, 168, 83, 0.4);
+  text-shadow: 0 0 30px rgba(212, 168, 83, 0.5), 0 2px 4px rgba(0,0,0,0.5);
   line-height: 1.3;
 }
 
-.curtain-names .with-text {
+.door-names .with-text {
   display: block;
-  font-size: clamp(20px, 5vw, 30px);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 4vw, 24px);
   color: var(--gold);
-  margin: 5px 0;
+  margin: 4px 0;
+  letter-spacing: 3px;
 }
 
-.curtain-subtitle {
+.door-subtitle {
   font-family: 'Playfair Display', serif;
-  font-size: 14px;
-  letter-spacing: 4px;
+  font-size: 13px;
+  letter-spacing: 5px;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-top: 20px;
+  margin-top: 12px;
 }
 
-.curtain-tap {
-  margin-top: 50px;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 15px;
-  color: var(--gold);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  animation: pulse 2s ease-in-out infinite;
+/* Door frame and doors */
+.door-frame {
+  position: relative;
+  width: clamp(260px, 75vw, 380px);
+  height: clamp(280px, 55vh, 420px);
+  perspective: 1200px;
+  z-index: 5;
 }
 
-.curtain-glow {
+/* Islamic arch at top */
+.door-arch {
   position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, rgba(212, 168, 83, 0.08) 0%, transparent 70%);
-  border-radius: 50%;
+  top: -2px; left: -2px; right: -2px;
+  height: 80px;
+  z-index: 6;
+}
+
+.door-arch svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Frame border */
+.door-frame-border {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border: 3px solid var(--gold);
+  border-radius: 8px;
+  box-shadow: 0 0 30px rgba(212, 168, 83, 0.2), inset 0 0 30px rgba(212, 168, 83, 0.1);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Inner glow behind doors */
+.door-inner-glow {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.15) 0%, transparent 70%);
   z-index: 0;
-  animation: glowPulse 3s ease-in-out infinite;
 }
 
-@keyframes glowPulse {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+.door-left, .door-right {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--burgundy-deep) 0%, var(--burgundy) 50%, var(--burgundy-light) 100%);
+  transition: transform 1.5s cubic-bezier(0.4, 0, 0.15, 1);
+  z-index: 3;
+  overflow: hidden;
+  border: 1px solid rgba(212, 168, 83, 0.3);
 }
 
-.curtain-sparkles {
+.door-left {
+  left: 0;
+  transform-origin: left center;
+  border-radius: 8px 0 0 8px;
+}
+
+.door-right {
+  right: 0;
+  transform-origin: right center;
+  border-radius: 0 8px 8px 0;
+}
+
+.door-screen.opening .door-left {
+  transform: perspective(1200px) rotateY(-110deg);
+}
+
+.door-screen.opening .door-right {
+  transform: perspective(1200px) rotateY(110deg);
+}
+
+/* Door panel decoration */
+.door-panel {
+  position: absolute;
+  top: 15%; left: 12%; right: 12%; bottom: 15%;
+  border: 1px solid rgba(212, 168, 83, 0.35);
+  border-radius: 4px;
+}
+
+.door-panel-inner {
+  position: absolute;
+  top: 8%; left: 8%; right: 8%; bottom: 8%;
+  border: 1px solid rgba(212, 168, 83, 0.2);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Islamic star pattern on doors */
+.door-star {
+  width: 40px; height: 40px;
+  opacity: 0.3;
+}
+
+/* Door handles */
+.door-handle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 40px;
+  z-index: 5;
+}
+
+.door-left .door-handle {
+  right: 8px;
+}
+
+.door-right .door-handle {
+  left: 8px;
+}
+
+.handle-plate {
+  width: 10px;
+  height: 40px;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold-dark));
+  border-radius: 5px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+.handle-knob {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: var(--gold-light);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(212, 168, 83, 0.6);
+}
+
+.door-left .handle-knob { right: -2px; }
+.door-right .handle-knob { left: -2px; }
+
+/* Tap to open below doors */
+.door-tap {
+  position: relative;
+  z-index: 10;
+  margin-top: 28px;
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  animation: doorPulse 2s ease-in-out infinite;
+  text-shadow: 0 0 10px rgba(212, 168, 83, 0.4);
+}
+
+@keyframes doorPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+/* Door sparkles */
+.door-sparkles {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
-.curtain-sparkle {
+.door-sparkle {
   position: absolute;
   width: 3px; height: 3px;
   background: var(--gold);
@@ -223,30 +284,6 @@ body {
   0%, 100% { opacity: 0; transform: scale(0) translateY(0); }
   50% { opacity: 0.8; transform: scale(1) translateY(-10px); }
 }
-
-.curtain-rod {
-  position: absolute;
-  top: 0; left: -5%; right: -5%;
-  height: 12px;
-  background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold-dark) 50%, var(--gold) 100%);
-  z-index: 10;
-  border-radius: 6px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-  pointer-events: none;
-}
-
-.curtain-rod::before, .curtain-rod::after {
-  content: '';
-  position: absolute;
-  top: -4px;
-  width: 20px; height: 20px;
-  background: var(--gold);
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(212, 168, 83, 0.5);
-}
-
-.curtain-rod::before { left: 2%; }
-.curtain-rod::after { right: 2%; }
 
 @keyframes pulse {
   0%, 100% { opacity: 0.4; }
@@ -1120,35 +1157,58 @@ section {
 </head>
 <body>
 
-<!-- CURTAIN REVEAL SCREEN -->
-<div class="curtain-screen" id="curtainScreen" onclick="openCurtains()">
-  <div class="curtain-rod"></div>
-  <div class="curtain-sparkles" id="curtainSparkles"></div>
-  <div class="curtain-glow"></div>
+<!-- DOOR REVEAL SCREEN -->
+<div class="door-screen" id="doorScreen" onclick="openDoors()">
+  <div class="door-sparkles" id="doorSparkles"></div>
 
-  <div class="curtain-center-content">
-    <p class="curtain-bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
-    <div class="curtain-names">
+  <div class="door-top-content">
+    <p class="door-bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
+    <div class="door-names">
       Abdul Ahad
       <span class="with-text">with</span>
       Tahira Aziz
     </div>
-    <p class="curtain-subtitle">Walima Invitation</p>
-    <p class="curtain-tap">Tap to Open</p>
+    <p class="door-subtitle">Walima Invitation</p>
   </div>
 
-  <div class="curtain-left">
-    <div class="curtain-fold"></div>
-    <div class="curtain-fold"></div>
-    <div class="curtain-fold"></div>
-    <div class="curtain-tassel"><div class="tassel-rope"></div><div class="tassel-body"></div></div>
+  <div class="door-frame">
+    <div class="door-frame-border"></div>
+    <div class="door-inner-glow"></div>
+
+    <!-- Left Door -->
+    <div class="door-left">
+      <div class="door-panel">
+        <div class="door-panel-inner">
+          <svg class="door-star" viewBox="0 0 100 100">
+            <polygon points="50,5 61,35 95,35 68,57 79,90 50,70 21,90 32,57 5,35 39,35" fill="none" stroke="var(--gold)" stroke-width="1.5" opacity="0.5"/>
+            <polygon points="50,20 57,40 80,40 62,52 69,75 50,62 31,75 38,52 20,40 43,40" fill="none" stroke="var(--gold)" stroke-width="1" opacity="0.3"/>
+          </svg>
+        </div>
+      </div>
+      <div class="door-handle">
+        <div class="handle-plate"></div>
+        <div class="handle-knob"></div>
+      </div>
+    </div>
+
+    <!-- Right Door -->
+    <div class="door-right">
+      <div class="door-panel">
+        <div class="door-panel-inner">
+          <svg class="door-star" viewBox="0 0 100 100">
+            <polygon points="50,5 61,35 95,35 68,57 79,90 50,70 21,90 32,57 5,35 39,35" fill="none" stroke="var(--gold)" stroke-width="1.5" opacity="0.5"/>
+            <polygon points="50,20 57,40 80,40 62,52 69,75 50,62 31,75 38,52 20,40 43,40" fill="none" stroke="var(--gold)" stroke-width="1" opacity="0.3"/>
+          </svg>
+        </div>
+      </div>
+      <div class="door-handle">
+        <div class="handle-plate"></div>
+        <div class="handle-knob"></div>
+      </div>
+    </div>
   </div>
-  <div class="curtain-right">
-    <div class="curtain-fold"></div>
-    <div class="curtain-fold"></div>
-    <div class="curtain-fold"></div>
-    <div class="curtain-tassel"><div class="tassel-rope"></div><div class="tassel-body"></div></div>
-  </div>
+
+  <p class="door-tap">&#9670; Tap to Open &#9670;</p>
 </div>
 
 <!-- CONFETTI -->
@@ -1375,12 +1435,12 @@ section {
 </div>
 
 <script>
-// ===== CURTAIN OPENING =====
-let curtainOpened = false;
-function openCurtains() {
-  if (curtainOpened) return;
-  curtainOpened = true;
-  const screen = document.getElementById('curtainScreen');
+// ===== DOOR OPENING =====
+let doorOpened = false;
+function openDoors() {
+  if (doorOpened) return;
+  doorOpened = true;
+  const screen = document.getElementById('doorScreen');
   const mainContent = document.getElementById('mainContent');
   const musicToggle = document.getElementById('musicToggle');
 
@@ -1398,16 +1458,16 @@ function openCurtains() {
     initRevealObserver();
     startMusic();
     initSparkleTrail();
-  }, 1600);
+  }, 1800);
 }
 
-// Curtain sparkles on load
+// Door sparkles on load
 (function() {
-  const container = document.getElementById('curtainSparkles');
+  const container = document.getElementById('doorSparkles');
   if (!container) return;
   for (let i = 0; i < 25; i++) {
     const s = document.createElement('div');
-    s.classList.add('curtain-sparkle');
+    s.classList.add('door-sparkle');
     s.style.left = (15 + Math.random() * 70) + '%';
     s.style.top = (10 + Math.random() * 80) + '%';
     s.style.animationDelay = (Math.random() * 4) + 's';
